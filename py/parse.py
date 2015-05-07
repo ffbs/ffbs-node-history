@@ -17,7 +17,7 @@ import datetime
 def writeRouterStats(ident, name, online, clients):
     "Writes statistics for a router into the corresponding file"
     m = md5.new(ident).hexdigest()
-    print m + ", " + ident +", " + ", " + str(online) + ", " + str(clients)
+#    print m + ", " + ident +", " + ", " + str(online) + ", " + str(clients)
 
     td = datetime.datetime.now()
     s = td.strftime("%Y%m")
@@ -49,6 +49,7 @@ try:
     knownRouter = json.loads(open(dataP + "router.json", "r").read())
 except:
     print("Failed to load persistent router list")
+    raise
 
 #Get router list from freifunk map
 try:
@@ -90,7 +91,7 @@ for r in knownRouter:
 
 #for new routers:
 for n in router:
-    print "New Router: " + n["id"]
+#    print "New Router: " + n["id"]
 
     knownRouter.append({"name": n["name"], "id": n["id"], "md5": md5.new(n["id"]).hexdigest()})
 
