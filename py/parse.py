@@ -7,6 +7,9 @@ dataP = "../data/"
 #Freifunk map: nodes.json
 nodesURL = "http://map.freifunk-bs.de/nodes.json"
 
+#md5 salt
+salt = ""
+
 import pickle
 import urllib
 import json
@@ -16,7 +19,7 @@ import datetime
 
 def writeRouterStats(ident, name, online, clients):
     "Writes statistics for a router into the corresponding file"
-    m = md5.new(ident).hexdigest()
+    m = md5.new(ident+salt).hexdigest()
 #    print m + ", " + ident +", " + ", " + str(online) + ", " + str(clients)
 
     td = datetime.datetime.now()
@@ -49,7 +52,7 @@ try:
     knownRouter = json.loads(open(dataP + "router.json", "r").read())
 except:
     print("Failed to load persistent router list")
-    raise
+#    raise
 
 #Get router list from freifunk map
 try:
@@ -93,7 +96,7 @@ for r in knownRouter:
 for n in router:
 #    print "New Router: " + n["id"]
 
-    knownRouter.append({"name": n["name"], "id": n["id"], "md5": md5.new(n["id"]).hexdigest()})
+    knownRouter.append({"name": n["name"], "id": n["id"], "md5": md5.new(n["id"]+salt).hexdigest()})
 
     writeRouterStats(n["id"], n["name"], 1, countClinets(links, nodes.index(n)))
 
