@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 #Path to Data
-outP = "../data/out/"
-dataP = "../data/"
+outP = "/var/www/shiny/ffbs-node-history/data/out/"
+dataP = "/var/www/shiny/ffbs-node-history/data/"
 
 #Freifunk map: nodes.json
-nodesURL = "http://map.freifunk-bs.de/nodes.json"
+nodesURL = "https://freifunk-bs.de/output/nodelist.json"
 
 #md5 salt
 salt = ""
@@ -57,24 +57,24 @@ except:
 #Get router list from freifunk map
 try:
     nodes = json.loads(urllib.urlopen(nodesURL).read())
-    #print("success")
+    print("success")
 except:
     raise 
 
 #Do some basic format check
-if not "nodes" in nodes or not "links" in nodes:
-    raise NameError("nodes.json malformed")
+if not "nodes" in nodes:
+    raise NameError("nodes.json malformed: Parent 'nodes'-node not found")
 
 
-links = nodes["links"]
 nodes = nodes["nodes"]
 
-router = []
-for n in nodes:
-    if "flags" in n:
-        if "gateway" in n["flags"] and "client" in n["flags"]:
-            if  n["flags"]["gateway"] == False and n["flags"]["client"] == False:
-                router.append(n)
+#legacy: router was used for old ffmap nodes.json. This filter is not needed in current nodeslist.json
+router = nodes
+#for n in nodes:
+#    if "flags" in n:
+#        if "gateway" in n["flags"] and "client" in n["flags"]:
+#            if  n["flags"]["gateway"] == False and n["flags"]["client"] == False:
+#                router.append(n)
 
 #look for known routers:
 for r in knownRouter:
@@ -88,17 +88,16 @@ for r in knownRouter:
     if node == None:
         writeRouterStats(r["id"], r["name"], 0, 0)
     else:
-        writeRouterStats(r["id"], r["name"], 1, countClinets(links,nodes.index(node)))
+        writeRouterStats(r["id"], r["name"], 1, node["status"]["clients"])
         del router[router.index(node)]
  
 
 #for new routers:
 for n in router:
-#    print "New Router: " + n["id"]
 
     knownRouter.append({"name": n["name"], "id": n["id"], "md5": md5.new(n["id"]+salt).hexdigest()})
 
-    writeRouterStats(n["id"], n["name"], 1, countClinets(links, nodes.index(n)))
+    writeRouterStats(n["id"], n["name"], 1, n["status"]["clients"])
 
 
 #save router list
