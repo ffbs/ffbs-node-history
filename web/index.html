@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/bootstrap.min.css">
+        <script type="text/javascript" src="/jquery.min.js"></script>
+        <script type="text/javascript" src="/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/dygraph-combined.js"></script>
+        <script type="text/javascript" src="/ffbs-node-history.js"></script>
+        <style>
+            .limited {
+                height: calc(100vh - 250px);
+                max-height: calc(100vh - 250px);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row-fluid" style="margin-bottom: 20px, max-height: 230px">
+                <div class="span8">
+                    <form>
+                        <fieldset>
+                            <legend>FFBS Node History</legend>
+                            <label>Choose Month</label>
+                            <select id="months"></select>
+                            <br>
+                            <button type="submit" class="btn">Go</button>
+                        </fieldset>
+                    </form>
+                    <hr>
+                </div>
+                <div class="span4">
+                    <img src="/ffbs.svg">
+                </div>
+            </div>
+            <div class="row-fluid limited">
+                <div id="outlet" class="span12 limited"></div>
+            </div>
+        </div>
+    </body>
+</html>
