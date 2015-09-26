@@ -41,14 +41,19 @@ function showGraph(url) {
     });
 }
 
-$(function () {
+function newhash() {
     if (location.hash) {
         var hash = location.hash.substr(1);
-        $('form').submit(function (ev) {
-            ev.preventDefault();
-            var month = $('select').val();
-            showGraph(url(hash, month));
-        });
         pollForMonths(hash);
     }
+}
+
+$(function () {
+    $('form').submit(function (ev) {
+        ev.preventDefault();
+        var month = $('select').val();
+        showGraph(url(hash, month));
+    });
+    window.onhashchange = newhash;
+    newhash();
 });
