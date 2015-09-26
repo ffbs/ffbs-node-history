@@ -42,6 +42,7 @@ function showGraph(url) {
 }
 
 function newhash() {
+    $('select').empty();
     if (location.hash) {
         var hash = location.hash.substr(1);
         pollForMonths(hash);
