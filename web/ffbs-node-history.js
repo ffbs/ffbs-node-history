@@ -53,7 +53,7 @@ $(function () {
     $('form').submit(function (ev) {
         ev.preventDefault();
         var month = $('select').val();
-        showGraph(url(hash, month));
+        showGraph(url(location.hash.substr(1), month));
     });
     window.onhashchange = newhash;
     newhash();
